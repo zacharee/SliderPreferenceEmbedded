@@ -75,8 +75,7 @@ public class SliderPreferenceEmbedded extends Preference
         seekBar.setProgress(mProgress);
 
         textView.setText(String.valueOf(mProgress));
-
-        addPercentageIfTrue();
+        setText(mProgress);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
@@ -85,13 +84,13 @@ public class SliderPreferenceEmbedded extends Preference
             {
                 if (seekBar.getProgress() < mMinProgress) {
                     seekBar.setProgress(mMinProgress);
-                    addPercentageIfTrue();
                 } else {
                     textView.setText(String.valueOf(i));
                     setProgressState(i);
                     saveProgress(i);
-                    addPercentageIfTrue();
                 }
+
+                setText(i);
                 if (mListener != null) mListener.onPreferenceChange(SliderPreferenceEmbedded.this, i);
             }
 
@@ -108,7 +107,7 @@ public class SliderPreferenceEmbedded extends Preference
                     seekBar.setProgress(mMinProgress);
                     setProgressState(mMinProgress);
                     saveProgress(mMinProgress);
-                    addPercentageIfTrue();
+                    setText(mMinProgress);
 
                     if (mListener != null) mListener.onPreferenceChange(SliderPreferenceEmbedded.this, mMinProgress);
                 }
@@ -131,7 +130,7 @@ public class SliderPreferenceEmbedded extends Preference
         }
         setProgressState(progress);
         saveProgress(progress);
-        addPercentageIfTrue();
+        setText(progress);
         notifyChanged();
     }
 
@@ -154,18 +153,16 @@ public class SliderPreferenceEmbedded extends Preference
     public void setIsPercentage(boolean isPercentage) {
         this.isPercentage = isPercentage;
 
-        addPercentageIfTrue();
+        setText(getCurrentProgress());
     }
 
     public boolean getIsPercentage() {
         return isPercentage;
     }
 
-    private void addPercentageIfTrue() {
-        if (isPercentage && view != null) {
-            TextView textView = view.findViewById(R.id.slider_pref_text);
-            if (!textView.getText().toString().contains("%")) textView.setText(textView.getText().toString().concat("%"));
-        }
+    private void setText(int progress) {
+        TextView textView = view.findViewById(R.id.slider_pref_text);
+        textView.setText(String.valueOf(progress).concat(isPercentage && !textView.getText().toString().contains("%") ? "%" : ""));
     }
 
     public View getView() {
