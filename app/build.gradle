@@ -1,12 +1,14 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'maven'
+apply plugin: 'android-maven'
+
+apply plugin: 'com.github.dcendents.android-maven'
 
 group='com.github.zacharee'
 
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.zacharee1.sliderpreferenceembedded"
         minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
