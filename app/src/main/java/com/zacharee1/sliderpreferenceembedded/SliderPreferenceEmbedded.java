@@ -85,6 +85,7 @@ public class SliderPreferenceEmbedded extends Preference
             {
                 if (seekBar.getProgress() < mMinProgress) {
                     seekBar.setProgress(mMinProgress);
+                    addPercentageIfTrue();
                 } else {
                     textView.setText(String.valueOf(i));
                     setProgressState(i);
@@ -107,6 +108,7 @@ public class SliderPreferenceEmbedded extends Preference
                     seekBar.setProgress(mMinProgress);
                     setProgressState(mMinProgress);
                     saveProgress(mMinProgress);
+                    addPercentageIfTrue();
 
                     if (mListener != null) mListener.onPreferenceChange(SliderPreferenceEmbedded.this, mMinProgress);
                 }
@@ -162,7 +164,7 @@ public class SliderPreferenceEmbedded extends Preference
     private void addPercentageIfTrue() {
         if (isPercentage && view != null) {
             TextView textView = view.findViewById(R.id.slider_pref_text);
-            textView.setText(textView.getText().toString().concat("%"));
+            if (!textView.getText().toString().contains("%")) textView.setText(textView.getText().toString().concat("%"));
         }
     }
 
