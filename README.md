@@ -19,4 +19,4 @@ Add the library:
 
     dependencies {
 	        compile 'com.github.zacharee:SliderPreferenceEmbedded:-SNAPSHOT'
-	  }
+    }
