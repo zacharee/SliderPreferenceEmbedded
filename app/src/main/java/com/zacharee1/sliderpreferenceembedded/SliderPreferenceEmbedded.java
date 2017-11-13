@@ -161,8 +161,10 @@ public class SliderPreferenceEmbedded extends Preference
     }
 
     private void setText(int progress) {
-        TextView textView = view.findViewById(R.id.slider_pref_text);
-        textView.setText(String.valueOf(progress).concat(isPercentage && !textView.getText().toString().contains("%") ? "%" : ""));
+        if (view != null) {
+            TextView textView = view.findViewById(R.id.slider_pref_text);
+            textView.setText(String.valueOf(progress).concat(isPercentage && !textView.getText().toString().contains("%") ? "%" : ""));
+        }
     }
 
     public View getView() {
