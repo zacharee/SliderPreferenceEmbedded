@@ -14,6 +14,7 @@ public class SliderPreferenceEmbedded extends Preference
 {
     private View view;
     private OnPreferenceChangeListener mListener;
+    private OnViewCreatedListener mViewListener;
     private int mProgress = -1;
     private int mMaxProgress = -1;
     private int mMinProgress = -1;
@@ -114,6 +115,8 @@ public class SliderPreferenceEmbedded extends Preference
             }
         });
 
+        if (mViewListener != null) mViewListener.viewCreated();
+
         return view;
     }
 
@@ -121,6 +124,10 @@ public class SliderPreferenceEmbedded extends Preference
     public void setOnPreferenceChangeListener(OnPreferenceChangeListener onPreferenceChangeListener)
     {
         mListener = onPreferenceChangeListener;
+    }
+
+    public void setOnViewCreatedListener(OnViewCreatedListener listener) {
+        mViewListener = listener;
     }
 
     public void setProgress(int progress) {
@@ -183,5 +190,9 @@ public class SliderPreferenceEmbedded extends Preference
 
     public void saveProgress(int progress) {
         getSharedPreferences().edit().putInt(getKey(), progress).apply();
+    }
+
+    public interface OnViewCreatedListener {
+        void viewCreated();
     }
 }
