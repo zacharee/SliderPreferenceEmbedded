@@ -3,14 +3,17 @@ package com.zacharee1.sliderpreferenceembedded;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.Preference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class SliderPreferenceEmbedded extends Preference
+public class SliderPreferenceEmbedded extends Preference implements SeekBar.OnSeekBarChangeListener
 {
     private View view;
     private OnPreferenceChangeListener mListener;
@@ -22,6 +25,9 @@ public class SliderPreferenceEmbedded extends Preference
     private int mXmlProgress = 0;
 
     private boolean isPercentage = false;
+
+    private TextView textView;
+    private SeekBar seekBar;
 
     @TargetApi(21)
     public SliderPreferenceEmbedded(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -69,43 +75,43 @@ public class SliderPreferenceEmbedded extends Preference
         mMaxProgress = (mMaxProgress == -1 ? 100 : mMaxProgress);
         mMinProgress = (mMinProgress == -1 ? 0 : mMinProgress);
 
-        SeekBar seekBar = view.findViewById(R.id.slider_pref_seekbar);
+        seekBar = view.findViewById(R.id.slider_pref_seekbar);
+        textView = view.findViewById(R.id.slider_pref_text);
 
         seekBar.setMax(mMaxProgress);
-        setProgress(mProgress);
+        seekBar.setProgress(mProgress);
+        textView.setText(String.valueOf(mProgress));
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-        {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b)
-            {
-                if (seekBar.getProgress() < mMinProgress) {
-                    i = mMinProgress;
-                }
-
-                setProgressWithoutSeekBar(i);
-
-                if (mListener != null) mListener.onPreferenceChange(SliderPreferenceEmbedded.this, i);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar)
-            {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar)
-            {
-                if (seekBar.getProgress() < mMinProgress) {
-                    setProgress(mMinProgress);
-
-                    if (mListener != null) mListener.onPreferenceChange(SliderPreferenceEmbedded.this, mMinProgress);
-                }
-            }
-        });
+        seekBar.setOnSeekBarChangeListener(this);
 
         if (mViewListener != null) mViewListener.viewCreated();
 
         return view;
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (progress < mMinProgress) {
+            progress = mMinProgress;
+        }
+
+        setProgress(progress);
+
+        if (mListener != null) mListener.onPreferenceChange(SliderPreferenceEmbedded.this, progress);
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        if (seekBar.getProgress() < mMinProgress) {
+            setProgress(mMinProgress);
+
+            if (mListener != null) mListener.onPreferenceChange(SliderPreferenceEmbedded.this, mMinProgress);
+        }
     }
 
     @Override
@@ -118,9 +124,8 @@ public class SliderPreferenceEmbedded extends Preference
         mViewListener = listener;
     }
 
-    public void setProgress(int progress) {
-        if (view != null) {
-            SeekBar seekBar = view.findViewById(R.id.slider_pref_seekbar);
+    public void setProgress(final int progress) {
+        if (seekBar != null) {
             seekBar.setProgress(progress);
         }
         setProgressWithoutSeekBar(progress);
@@ -138,8 +143,7 @@ public class SliderPreferenceEmbedded extends Preference
 
     public void setMaxProgess(int maxProgess) {
         mMaxProgress = maxProgess;
-        if (view != null) {
-            SeekBar seekBar = view.findViewById(R.id.slider_pref_seekbar);
+        if (seekBar != null) {
             seekBar.setMax(maxProgess);
         }
     }
@@ -159,8 +163,7 @@ public class SliderPreferenceEmbedded extends Preference
     }
 
     private void setText(int progress) {
-        if (view != null) {
-            TextView textView = view.findViewById(R.id.slider_pref_text);
+        if (textView != null) {
             textView.setText(String.valueOf(progress).concat(isPercentage && !textView.getText().toString().contains("%") ? "%" : ""));
         }
     }
