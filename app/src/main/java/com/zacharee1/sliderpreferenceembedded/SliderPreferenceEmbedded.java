@@ -83,7 +83,7 @@ public class SliderPreferenceEmbedded extends Preference
                     i = mMinProgress;
                 }
 
-                setProgress(i);
+                setProgressWithoutSeekBar(i);
 
                 if (mListener != null) mListener.onPreferenceChange(SliderPreferenceEmbedded.this, i);
             }
@@ -125,6 +125,10 @@ public class SliderPreferenceEmbedded extends Preference
             SeekBar seekBar = view.findViewById(R.id.slider_pref_seekbar);
             seekBar.setProgress(progress);
         }
+        setProgressWithoutSeekBar(progress);
+    }
+
+    private void setProgressWithoutSeekBar(int progress) {
         setProgressState(progress);
         saveProgress(progress);
         setText(progress);
