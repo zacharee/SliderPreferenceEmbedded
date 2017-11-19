@@ -97,6 +97,10 @@ public class SliderPreferenceEmbeddedNew extends Preference {
         mListener = onPreferenceChangeListener;
     }
 
+    public void setOnViewCreatedListener(OnViewCreatedListener listener) {
+        mViewListener = listener;
+    }
+
     public void setProgress(int progress) {
         seekBar.setProgress(progress);
 
