@@ -39,11 +39,10 @@ public class SliderPreferenceEmbedded extends Preference {
                 attrs,
                 R.styleable.SliderPreferenceEmbedded,
                 0, 0);
-        float density = context.getResources().getDisplayMetrics().density;
 
         try {
-            mMaxProgress = a.getInteger(R.styleable.SliderPreferenceEmbedded_max, -1);
-            mMinProgress = a.getInteger(R.styleable.SliderPreferenceEmbedded_min, -1);
+            mMaxProgress = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_max, -1);
+            mMinProgress = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_min, -1);
             mXmlProgress = a.getInteger(R.styleable.SliderPreferenceEmbedded_default_progress, -1);
             mFormat = a.getString(R.styleable.SliderPreferenceEmbedded_format);
         } finally {
