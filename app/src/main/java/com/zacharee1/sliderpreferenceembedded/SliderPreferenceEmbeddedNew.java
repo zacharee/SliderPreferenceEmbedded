@@ -63,6 +63,10 @@ public class SliderPreferenceEmbeddedNew extends Preference {
     protected void onBindView(View view) {
         super.onBindView(view);
 
+        mProgress = (mProgress == -1 ? getSavedProgress() : mProgress);
+        mMaxProgress = (mMaxProgress == -1 ? 100 : mMaxProgress);
+        mMinProgress = (mMinProgress == -1 ? 0 : mMinProgress);
+
         seekBar = view.findViewById(R.id.slider_pref_seekbar_discrete);
         seekBar.setMin(mMinProgress);
         seekBar.setMax(mMaxProgress);
@@ -132,6 +136,10 @@ public class SliderPreferenceEmbeddedNew extends Preference {
 
     private void setProgressState(int progress) {
         mProgress = progress;
+    }
+
+    private int getSavedProgress() {
+        return getSharedPreferences().getInt(getKey(), 0);
     }
 
     public interface OnViewCreatedListener {
