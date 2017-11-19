@@ -51,7 +51,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
     @Override
     protected View onCreateView(ViewGroup parent) {
         setLayoutResource(R.layout.pref_view_embedded);
-        setWidgetLayoutResource(R.layout.slider_pref_view);
+        setWidgetLayoutResource(R.layout.slider_pref_view_new);
 
         mView = super.onCreateView(parent);
 
