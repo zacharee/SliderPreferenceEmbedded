@@ -40,6 +40,24 @@ public class AlmostRippleDrawable extends StateDrawable implements Animatable {
     private boolean mRunning = false;
     private int mDuration = ANIMATION_DURATION;
     private float mAnimationInitialValue;
+    private final Runnable mUpdater = new Runnable() {
+
+        @Override
+        public void run() {
+
+            long currentTime = SystemClock.uptimeMillis();
+            long diff = currentTime - mStartTime;
+            if (diff < mDuration) {
+                float interpolation = mInterpolator.getInterpolation((float) diff / (float) mDuration);
+                scheduleSelf(mUpdater, currentTime + FRAME_DURATION);
+                updateAnimation(interpolation);
+            } else {
+                unscheduleSelf(mUpdater);
+                mRunning = false;
+                updateAnimation(1f);
+            }
+        }
+    };
     //We don't use colors just with our drawable state because of animations
     private int mPressedColor;
     private int mFocusedColor;
@@ -53,6 +71,13 @@ public class AlmostRippleDrawable extends StateDrawable implements Animatable {
         setColor(tintStateList);
     }
 
+    private static int getModulatedAlphaColor(int alphaValue, int originalColor) {
+        int alpha = Color.alpha(originalColor);
+        int scale = alphaValue + (alphaValue >> 7);
+        alpha = alpha * scale >> 8;
+        return Color.argb(alpha, Color.red(originalColor), Color.green(originalColor), Color.blue(originalColor));
+    }
+
     public void setColor(@NonNull ColorStateList tintStateList) {
         int defaultColor = tintStateList.getDefaultColor();
         mFocusedColor = tintStateList.getColorForState(new int[]{android.R.attr.state_enabled, android.R.attr.state_focused}, defaultColor);
@@ -63,13 +88,6 @@ public class AlmostRippleDrawable extends StateDrawable implements Animatable {
         mFocusedColor = getModulatedAlphaColor(130, mFocusedColor);
         mPressedColor = getModulatedAlphaColor(130, mPressedColor);
         mDisabledColor = getModulatedAlphaColor(130, mDisabledColor);
-    }
-
-    private static int getModulatedAlphaColor(int alphaValue, int originalColor) {
-        int alpha = Color.alpha(originalColor);
-        int scale = alphaValue + (alphaValue >> 7);
-        alpha = alpha * scale >> 8;
-        return Color.argb(alpha, Color.red(originalColor), Color.green(originalColor), Color.blue(originalColor));
     }
 
     @Override
@@ -183,25 +201,6 @@ public class AlmostRippleDrawable extends StateDrawable implements Animatable {
         mCurrentScale = initial + (destination - initial) * factor;
         invalidateSelf();
     }
-
-    private final Runnable mUpdater = new Runnable() {
-
-        @Override
-        public void run() {
-
-            long currentTime = SystemClock.uptimeMillis();
-            long diff = currentTime - mStartTime;
-            if (diff < mDuration) {
-                float interpolation = mInterpolator.getInterpolation((float) diff / (float) mDuration);
-                scheduleSelf(mUpdater, currentTime + FRAME_DURATION);
-                updateAnimation(interpolation);
-            } else {
-                unscheduleSelf(mUpdater);
-                mRunning = false;
-                updateAnimation(1f);
-            }
-        }
-    };
 
     @Override
     public void start() {

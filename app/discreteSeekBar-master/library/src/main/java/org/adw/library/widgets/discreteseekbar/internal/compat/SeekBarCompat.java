@@ -67,6 +67,7 @@ public class SeekBarCompat {
 
     /**
      * Sets the color of the seekbar ripple
+     *
      * @param drawable
      * @param colorStateList The ColorStateList the track ripple will be changed to
      */

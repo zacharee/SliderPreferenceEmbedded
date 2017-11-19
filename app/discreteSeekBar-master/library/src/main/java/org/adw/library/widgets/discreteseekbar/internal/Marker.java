@@ -48,6 +48,7 @@ import org.adw.library.widgets.discreteseekbar.internal.drawable.MarkerDrawable;
 public class Marker extends ViewGroup implements MarkerDrawable.MarkerAnimationListener {
     private static final int PADDING_DP = 4;
     private static final int ELEVATION_DP = 8;
+    MarkerDrawable mMarkerDrawable;
     //The TextView to show the info
     private TextView mNumber;
     //The max width of this View
@@ -55,13 +56,12 @@ public class Marker extends ViewGroup implements MarkerDrawable.MarkerAnimationL
     //some distance between the thumb and our bubble marker.
     //This will be added to our measured height
     private int mSeparation;
-    MarkerDrawable mMarkerDrawable;
 
     public Marker(Context context, AttributeSet attrs, int defStyleAttr, String maxValue, int thumbSize, int separation) {
         super(context, attrs, defStyleAttr);
         //as we're reading the parent DiscreteSeekBar attributes, it may wrongly set this view's visibility.
         setVisibility(View.VISIBLE);
-        
+
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DiscreteSeekBar,
                 R.attr.discreteSeekBarStyle, R.style.Widget_DiscreteSeekBar);
@@ -164,12 +164,12 @@ public class Marker extends ViewGroup implements MarkerDrawable.MarkerAnimationL
         animateOpen();
     }
 
-    public void setValue(CharSequence value) {
-        mNumber.setText(value);
-    }
-
     public CharSequence getValue() {
         return mNumber.getText();
+    }
+
+    public void setValue(CharSequence value) {
+        mNumber.setText(value);
     }
 
     public void animateOpen() {

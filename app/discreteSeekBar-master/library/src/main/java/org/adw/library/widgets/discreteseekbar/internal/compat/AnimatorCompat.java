@@ -35,12 +35,16 @@ import android.os.Build;
  * @hide
  */
 public abstract class AnimatorCompat {
-    public interface AnimationFrameUpdateListener {
-        public void onAnimationFrame(float currentValue);
-    }
-
     AnimatorCompat() {
 
+    }
+
+    public static final AnimatorCompat create(float start, float end, AnimationFrameUpdateListener listener) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            return new AnimatorCompatV11(start, end, listener);
+        } else {
+            return new AnimatorCompatBase(start, end, listener);
+        }
     }
 
     public abstract void cancel();
@@ -51,12 +55,8 @@ public abstract class AnimatorCompat {
 
     public abstract void start();
 
-    public static final AnimatorCompat create(float start, float end, AnimationFrameUpdateListener listener) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            return new AnimatorCompatV11(start, end, listener);
-        } else {
-            return new AnimatorCompatBase(start, end, listener);
-        }
+    public interface AnimationFrameUpdateListener {
+        public void onAnimationFrame(float currentValue);
     }
 
     private static class AnimatorCompatBase extends AnimatorCompat {

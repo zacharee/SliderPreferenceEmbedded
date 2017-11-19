@@ -49,6 +49,7 @@ import org.adw.library.widgets.discreteseekbar.internal.drawable.MarkerDrawable;
 public class PopupIndicator {
 
     private final WindowManager mWindowManager;
+    Point screenSize = new Point();
     private boolean mShowing;
     private Floater mPopupView;
     //Outside listener for the DiscreteSeekBar to get MarkerDrawable animation events.
@@ -57,7 +58,6 @@ public class PopupIndicator {
     //... phew!
     private MarkerDrawable.MarkerAnimationListener mListener;
     private int[] mDrawingLocation = new int[2];
-    Point screenSize = new Point();
 
     public PopupIndicator(Context context, AttributeSet attrs, int defStyleAttr, String maxValue, int thumbSize, int separation) {
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

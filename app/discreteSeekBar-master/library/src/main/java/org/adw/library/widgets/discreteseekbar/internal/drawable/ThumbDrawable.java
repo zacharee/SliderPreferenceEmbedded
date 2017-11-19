@@ -45,6 +45,14 @@ public class ThumbDrawable extends StateDrawable implements Animatable {
     private final int mSize;
     private boolean mOpen;
     private boolean mRunning;
+    private Runnable opener = new Runnable() {
+        @Override
+        public void run() {
+            mOpen = true;
+            invalidateSelf();
+            mRunning = false;
+        }
+    };
 
     public ThumbDrawable(@NonNull ColorStateList tintStateList, int size) {
         super(tintStateList);
@@ -81,15 +89,6 @@ public class ThumbDrawable extends StateDrawable implements Animatable {
         unscheduleSelf(opener);
         invalidateSelf();
     }
-
-    private Runnable opener = new Runnable() {
-        @Override
-        public void run() {
-            mOpen = true;
-            invalidateSelf();
-            mRunning = false;
-        }
-    };
 
     @Override
     public void start() {
