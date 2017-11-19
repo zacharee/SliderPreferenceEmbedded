@@ -59,7 +59,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
 
         mView = super.onCreateView(parent);
 
-        mProgress = (mProgress == -1 ? getSavedProgress() : mXmlProgress);
+        mProgress = (mProgress == -1 ? getSavedProgress() : mProgress);
         mMaxProgress = (mMaxProgress == -1 ? 100 : mMaxProgress);
         mMinProgress = (mMinProgress == -1 ? 0 : mMinProgress);
 
@@ -150,7 +150,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
     }
 
     private int getSavedProgress() {
-        return getSharedPreferences().getInt(getKey(), 0);
+        return getSharedPreferences().getInt(getKey(), mXmlProgress);
     }
 
     public interface OnViewCreatedListener {
