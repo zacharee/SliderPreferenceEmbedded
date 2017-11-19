@@ -83,8 +83,15 @@ public class SliderPreferenceEmbeddedNew extends Preference {
             }
         });
 
-        if (mViewListener != null) mViewListener.viewCreated();
+        if (mViewListener != null) mViewListener.viewCreated(this);
         return mView;
+    }
+
+    @Override
+    protected void onBindView(View view) {
+        super.onBindView(view);
+
+        if (mViewListener != null) mViewListener.viewBound(this);
     }
 
     @Override
@@ -142,6 +149,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
     }
 
     public interface OnViewCreatedListener {
-        void viewCreated();
+        void viewCreated(SliderPreferenceEmbeddedNew preferenceEmbeddedNew);
+        void viewBound(SliderPreferenceEmbeddedNew preferenceEmbeddedNew);
     }
 }
