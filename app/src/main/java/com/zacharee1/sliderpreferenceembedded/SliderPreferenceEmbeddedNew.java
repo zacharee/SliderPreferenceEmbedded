@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
+import org.adw.library.widgets.discreteseekbar.internal.drawable.ThumbDrawable;
 
 public class SliderPreferenceEmbeddedNew extends Preference {
     private View mView;
@@ -39,6 +40,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
                 attrs,
                 R.styleable.SliderPreferenceEmbedded,
                 0, 0);
+        float density = context.getResources().getDisplayMetrics().density;
 
         try {
             mMaxProgress = a.getInteger(R.styleable.SliderPreferenceEmbedded_max, -1);
@@ -57,7 +59,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
 
         mView = super.onCreateView(parent);
 
-        mProgress = (mXmlProgress == -1 ? getSavedProgress() : mXmlProgress);
+        mProgress = (mProgress == -1 ? getSavedProgress() : mXmlProgress);
         mMaxProgress = (mMaxProgress == -1 ? 100 : mMaxProgress);
         mMinProgress = (mMinProgress == -1 ? 0 : mMinProgress);
 
