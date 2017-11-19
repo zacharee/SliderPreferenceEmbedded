@@ -55,19 +55,11 @@ public class SliderPreferenceEmbeddedNew extends Preference {
 
         mView = super.onCreateView(parent);
 
-        if (mViewListener != null) mViewListener.viewCreated();
-        return mView;
-    }
-
-    @Override
-    protected void onBindView(View view) {
-        super.onBindView(view);
-
         mProgress = (mXmlProgress == -1 ? getSavedProgress() : mXmlProgress);
         mMaxProgress = (mMaxProgress == -1 ? 100 : mMaxProgress);
         mMinProgress = (mMinProgress == -1 ? 0 : mMinProgress);
 
-        seekBar = view.findViewById(R.id.slider_pref_seekbar_discrete);
+        seekBar = mView.findViewById(R.id.slider_pref_seekbar_discrete);
         seekBar.setMin(mMinProgress);
         seekBar.setMax(mMaxProgress);
         seekBar.setProgress(mProgress);
@@ -90,6 +82,9 @@ public class SliderPreferenceEmbeddedNew extends Preference {
                 if (mListener != null) mListener.onPreferenceChange(SliderPreferenceEmbeddedNew.this, seekBar.getProgress());
             }
         });
+
+        if (mViewListener != null) mViewListener.viewCreated();
+        return mView;
     }
 
     @Override
