@@ -2,10 +2,9 @@
 <resources>
 
     <declare-styleable name="SliderPreferenceEmbedded">
-        <attr name="max" format="integer|reference" />
-        <attr name="min" format="integer|reference" />
+        <attr name="seek_max" format="integer|reference" />
+        <attr name="seek_min" format="integer|reference" />
         <attr name="default_progress" format="integer|reference" />
-        <attr name="percentage" format="boolean|reference" />
         <attr name="format" format="string|reference" />
     </declare-styleable>
 

@@ -9,9 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
-import org.adw.library.widgets.discreteseekbar.internal.drawable.ThumbDrawable;
 
-public class SliderPreferenceEmbeddedNew extends Preference {
+public class SliderPreferenceEmbedded extends Preference {
     private View mView;
     private OnPreferenceChangeListener mListener;
     private OnViewCreatedListener mViewListener;
@@ -25,15 +24,15 @@ public class SliderPreferenceEmbeddedNew extends Preference {
     public DiscreteSeekBar seekBar;
 
     @TargetApi(21)
-    public SliderPreferenceEmbeddedNew(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SliderPreferenceEmbedded(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public SliderPreferenceEmbeddedNew(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SliderPreferenceEmbedded(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public SliderPreferenceEmbeddedNew(Context context, AttributeSet attrs) {
+    public SliderPreferenceEmbedded(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         TypedArray a = context.getTheme().obtainStyledAttributes(
@@ -55,7 +54,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
     @Override
     protected View onCreateView(ViewGroup parent) {
         setLayoutResource(R.layout.pref_view_embedded);
-        setWidgetLayoutResource(R.layout.slider_pref_view_new);
+        setWidgetLayoutResource(R.layout.slider_pref_view);
 
         mView = super.onCreateView(parent);
 
@@ -73,7 +72,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
             @Override
             public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
                 setProgressWithoutBar(value);
-                if (mListener != null) mListener.onPreferenceChange(SliderPreferenceEmbeddedNew.this, value);
+                if (mListener != null) mListener.onPreferenceChange(SliderPreferenceEmbedded.this, value);
             }
 
             @Override
@@ -84,7 +83,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
             @Override
             public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
                 setProgressWithoutBar(seekBar.getProgress());
-                if (mListener != null) mListener.onPreferenceChange(SliderPreferenceEmbeddedNew.this, seekBar.getProgress());
+                if (mListener != null) mListener.onPreferenceChange(SliderPreferenceEmbedded.this, seekBar.getProgress());
             }
         });
 
@@ -154,7 +153,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
     }
 
     public interface OnViewCreatedListener {
-        void viewCreated(SliderPreferenceEmbeddedNew preferenceEmbeddedNew);
-        void viewBound(SliderPreferenceEmbeddedNew preferenceEmbeddedNew);
+        void viewCreated(SliderPreferenceEmbedded preferenceEmbeddedNew);
+        void viewBound(SliderPreferenceEmbedded preferenceEmbeddedNew);
     }
 }
