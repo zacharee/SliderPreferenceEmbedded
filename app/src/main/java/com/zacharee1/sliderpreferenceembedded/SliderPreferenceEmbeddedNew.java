@@ -17,8 +17,9 @@ public class SliderPreferenceEmbeddedNew extends Preference {
     private int mProgress = -1;
     private int mMaxProgress = -1;
     private int mMinProgress = -1;
-
     private int mXmlProgress = 0;
+
+    private String mFormat = null;
 
     public DiscreteSeekBar seekBar;
 
@@ -43,6 +44,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
             mMaxProgress = a.getInteger(R.styleable.SliderPreferenceEmbedded_max, -1);
             mMinProgress = a.getInteger(R.styleable.SliderPreferenceEmbedded_min, -1);
             mXmlProgress = a.getInteger(R.styleable.SliderPreferenceEmbedded_default_progress, -1);
+            mFormat = a.getString(R.styleable.SliderPreferenceEmbedded_format);
         } finally {
             a.recycle();
         }
@@ -63,6 +65,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
         seekBar.setMin(mMinProgress);
         seekBar.setMax(mMaxProgress);
         seekBar.setProgress(mProgress);
+        seekBar.setIndicatorFormatter(mFormat);
 
         seekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
             @Override
