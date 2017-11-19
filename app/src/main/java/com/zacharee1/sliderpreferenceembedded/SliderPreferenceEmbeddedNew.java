@@ -20,7 +20,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
 
     private int mXmlProgress = 0;
 
-    private DiscreteSeekBar seekBar;
+    public DiscreteSeekBar seekBar;
 
     @TargetApi(21)
     public SliderPreferenceEmbeddedNew(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -63,7 +63,7 @@ public class SliderPreferenceEmbeddedNew extends Preference {
     protected void onBindView(View view) {
         super.onBindView(view);
 
-        mProgress = (mProgress == -1 ? getSavedProgress() : mProgress);
+        mProgress = (mXmlProgress == -1 ? getSavedProgress() : mXmlProgress);
         mMaxProgress = (mMaxProgress == -1 ? 100 : mMaxProgress);
         mMinProgress = (mMinProgress == -1 ? 0 : mMinProgress);
 
