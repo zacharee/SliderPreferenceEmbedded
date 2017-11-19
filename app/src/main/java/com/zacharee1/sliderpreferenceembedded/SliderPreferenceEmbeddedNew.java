@@ -104,19 +104,19 @@ public class SliderPreferenceEmbeddedNew extends Preference {
     }
 
     public void setProgress(int progress) {
-        seekBar.setProgress(progress);
+        if (seekBar != null) seekBar.setProgress(progress);
 
         setProgressWithoutBar(progress);
     }
 
     public void setMax(int max) {
         mMaxProgress = max;
-        seekBar.setMax(max);
+        if (seekBar != null) seekBar.setMax(max);
     }
 
     public void setMin(int min) {
         mMinProgress = min;
-        seekBar.setMin(min);
+        if (seekBar != null) seekBar.setMin(min);
     }
 
     public int getMax() {
