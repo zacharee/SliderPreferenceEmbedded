@@ -12,7 +12,7 @@
     android:gravity="center_vertical">
 
     <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
-        android:id="@+id/slider_pref_seekbar_discrete"
+        android:id="@+id/slider_pref_seekbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
