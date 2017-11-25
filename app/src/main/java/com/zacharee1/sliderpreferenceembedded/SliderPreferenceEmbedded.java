@@ -61,7 +61,7 @@ public class SliderPreferenceEmbedded extends Preference {
         mMaxProgress = (mMaxProgress == -1 ? 100 : mMaxProgress);
         mMinProgress = (mMinProgress == -1 ? 0 : mMinProgress);
 
-        seekBar = mView.findViewById(R.id.slider_pref_seekbar);
+        seekBar = mView.findViewById(R.id.seekbar_view);
         seekBar.setMin(mMinProgress);
         seekBar.setMax(mMaxProgress);
         seekBar.setProgress(mProgress);
