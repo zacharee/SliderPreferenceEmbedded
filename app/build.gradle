@@ -20,11 +20,12 @@ android {
 
     repositories {
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.0.1'
-    implementation project(':SeekBar')
+    compile 'com.github.pinpong:discreteSeekBar:-SNAPSHOT'
 }
