@@ -244,6 +244,10 @@ public class DiscreteSeekBar extends View {
         updateProgressMessage(mProgress);
     }
 
+    public String getIndicatorFormatter() {
+        return mIndicatorFormatter;
+    }
+
     /**
      * Retrieves the current {@link DiscreteSeekBar.NumericTransformer}
      *

@@ -21,7 +21,7 @@ public class SliderPreferenceEmbedded extends Preference {
 
     private String mFormat = null;
 
-    public DiscreteSeekBar seekBar;
+    public DiscreteSeekBarText seekBar;
 
     @TargetApi(21)
     public SliderPreferenceEmbedded(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -67,7 +67,7 @@ public class SliderPreferenceEmbedded extends Preference {
         seekBar.setProgress(mProgress);
         seekBar.setIndicatorFormatter(mFormat);
 
-        seekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+        seekBar.setOnProgressChangeListener(new DiscreteSeekBarText.OnProgressChangeListener() {
             @Override
             public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
                 setProgressWithoutBar(value);

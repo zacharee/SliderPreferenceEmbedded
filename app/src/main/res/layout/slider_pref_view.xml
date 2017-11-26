@@ -11,15 +11,15 @@
     android:layout_gravity="center_vertical"
     android:gravity="center_vertical">
 
-    <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+    <com.zacharee1.sliderpreferenceembedded.DiscreteSeekBarText
         android:id="@+id/seekbar_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        app:dsb_indicatorColor="?attr/colorAccent"
-        app:dsb_progressColor="?attr/colorAccent"
-        app:dsb_rippleColor="?attr/colorAccent"
-        app:dsb_trackColor="?attr/colorAccent"/>
+        android:layout_weight="1" />
+        <!--app:dsb_indicatorColor="?attr/colorAccent"-->
+        <!--app:dsb_progressColor="?attr/colorAccent"-->
+        <!--app:dsb_rippleColor="?attr/colorAccent"-->
+        <!--app:dsb_trackColor="?attr/colorAccent"/>-->
 
 </LinearLayout>
