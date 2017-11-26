@@ -29,14 +29,16 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
 
     public DiscreteSeekBarText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(attrs);
+        init();
     }
 
-    private void init(AttributeSet attrs) {
+    private void init() {
         inflate(getContext(), R.layout.seekbar_with_text, this);
 
         mSeekBar = findViewById(R.id.seekbar);
         mTextView = findViewById(R.id.textview);
+
+        mSeekBar.setOnProgressChangeListener(this);
 
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = getContext().getTheme();
