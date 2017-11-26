@@ -105,7 +105,11 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
 
     private void setText(String text) {
         String format = mSeekBar.getIndicatorFormatter();
-        mTextView.setText(String.format(format, text));
+        if (format == null) {
+            mTextView.setText(text);
+        } else {
+            mTextView.setText(String.format(format, text));
+        }
     }
 
     public interface OnProgressChangeListener {
