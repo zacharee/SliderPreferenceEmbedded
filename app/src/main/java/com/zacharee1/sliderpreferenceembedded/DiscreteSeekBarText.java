@@ -72,6 +72,7 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
 
     public void setProgress(int progress) {
         mSeekBar.setProgress(progress);
+        setText(String.valueOf(progress));
     }
 
     public void setMin(int min) {
