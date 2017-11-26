@@ -113,6 +113,14 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
         return mSeekBar.getMax();
     }
 
+    public boolean getPopupIndicatorEnabled() {
+        return mSeekBar.getIndicatorPopupEnabled();
+    }
+
+    public boolean getTextIndicatorEnabled() {
+        return mTextView.getVisibility() == VISIBLE;
+    }
+
     private void setText(String text) {
         String format = mSeekBar.getIndicatorFormatter();
         if (format == null) {

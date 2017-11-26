@@ -464,6 +464,10 @@ public class DiscreteSeekBar extends View {
         this.mIndicatorPopupEnabled = enabled;
     }
 
+    public boolean getIndicatorPopupEnabled() {
+        return mIndicatorPopupEnabled;
+    }
+
     private void updateIndicatorSizes() {
         if (!isInEditMode()) {
             if (mNumericTransformer.useStringTransform()) {

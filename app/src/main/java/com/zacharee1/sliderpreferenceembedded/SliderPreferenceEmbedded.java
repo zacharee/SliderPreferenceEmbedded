@@ -14,10 +14,14 @@ public class SliderPreferenceEmbedded extends Preference {
     private View mView;
     private OnPreferenceChangeListener mListener;
     private OnViewCreatedListener mViewListener;
+
     private int mProgress = -1;
     private int mMaxProgress = -1;
     private int mMinProgress = -1;
     private int mXmlProgress = 0;
+
+    private boolean popupEnabled = true;
+    private boolean textEnabled = false;
 
     private String mFormat = null;
 
@@ -45,6 +49,8 @@ public class SliderPreferenceEmbedded extends Preference {
             mMinProgress = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_min, -1);
             mXmlProgress = a.getInteger(R.styleable.SliderPreferenceEmbedded_default_progress, -1);
             mFormat = a.getString(R.styleable.SliderPreferenceEmbedded_format);
+            popupEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_popup, popupEnabled);
+            textEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_text, textEnabled);
         } finally {
             a.recycle();
         }
@@ -66,6 +72,8 @@ public class SliderPreferenceEmbedded extends Preference {
         seekBar.setMax(mMaxProgress);
         seekBar.setProgress(mProgress);
         seekBar.setIndicatorFormatter(mFormat);
+        seekBar.setTextIndicatorEnabled(textEnabled);
+        seekBar.setPopupIndicatorEnabled(popupEnabled);
 
         seekBar.setOnProgressChangeListener(new DiscreteSeekBarText.OnProgressChangeListener() {
             @Override
@@ -122,6 +130,16 @@ public class SliderPreferenceEmbedded extends Preference {
         if (seekBar != null) seekBar.setMin(min);
     }
 
+    public void setPopupEnabled(boolean enabled) {
+        popupEnabled = enabled;
+        seekBar.setPopupIndicatorEnabled(enabled);
+    }
+
+    public void setTextEnabled(boolean enabled) {
+        textEnabled = enabled;
+        seekBar.setTextIndicatorEnabled(enabled);
+    }
+
     public int getMax() {
         return mMaxProgress;
     }
@@ -132,6 +150,14 @@ public class SliderPreferenceEmbedded extends Preference {
 
     public int getProgress() {
         return mProgress;
+    }
+
+    public boolean getPopupEnabled() {
+        return seekBar.getPopupIndicatorEnabled();
+    }
+
+    public boolean getTextEnabled() {
+        return seekBar.getTextIndicatorEnabled();
     }
 
     private void setProgressWithoutBar(int progress) {
