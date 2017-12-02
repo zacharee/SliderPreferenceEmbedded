@@ -8,6 +8,7 @@
         <attr name="format" format="string|reference" />
         <attr name="show_text" format="boolean|reference" />
         <attr name="show_popup" format="boolean|reference" />
+        <attr name="scale" format="float|reference" />
     </declare-styleable>
 
 </resources>

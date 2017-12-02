@@ -20,6 +20,8 @@ public class SliderPreferenceEmbedded extends Preference {
     private int mMinProgress = -1;
     private int mXmlProgress = 0;
 
+    private float mScale = 1.0F;
+
     private boolean popupEnabled = true;
     private boolean textEnabled = false;
 
@@ -51,6 +53,7 @@ public class SliderPreferenceEmbedded extends Preference {
             mFormat = a.getString(R.styleable.SliderPreferenceEmbedded_format);
             popupEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_popup, popupEnabled);
             textEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_text, textEnabled);
+            mScale = a.getFloat(R.styleable.SliderPreferenceEmbedded_scale, mScale);
         } finally {
             a.recycle();
         }
@@ -74,6 +77,7 @@ public class SliderPreferenceEmbedded extends Preference {
         seekBar.setProgress(mProgress);
         seekBar.setTextIndicatorEnabled(textEnabled);
         seekBar.setPopupIndicatorEnabled(popupEnabled);
+        seekBar.setScale(mScale);
 
         seekBar.setOnProgressChangeListener(new DiscreteSeekBarText.OnProgressChangeListener() {
             @Override
@@ -138,6 +142,11 @@ public class SliderPreferenceEmbedded extends Preference {
     public void setTextEnabled(boolean enabled) {
         textEnabled = enabled;
         seekBar.setTextIndicatorEnabled(enabled);
+    }
+
+    public void setScale(float scale) {
+        mScale = scale;
+        seekBar.setScale(scale);
     }
 
     public int getMax() {

@@ -17,15 +17,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     repositories {
         jcenter()
         maven { url 'https://jitpack.io' }
     }
+    buildToolsVersion '27.0.1'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.0.1'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation project(':SeekBar')
 }

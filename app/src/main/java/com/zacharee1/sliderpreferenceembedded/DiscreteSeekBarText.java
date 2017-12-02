@@ -16,6 +16,7 @@ import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar.OnProgressChangeListener {
     private DiscreteSeekBar mSeekBar;
     private TextView mTextView;
+    private float mScale = 1.0F;
 
     private OnProgressChangeListener mListener;
 
@@ -65,7 +66,7 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
     public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
         if (mListener != null) mListener.onProgressChanged(seekBar, value, fromUser);
 
-        setText(String.valueOf(value));
+        setText(value);
     }
 
     public void setOnProgressChangeListener(OnProgressChangeListener listener) {
@@ -74,7 +75,7 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
 
     public void setProgress(int progress) {
         mSeekBar.setProgress(progress);
-        setText(String.valueOf(progress));
+        setText(progress);
     }
 
     public void setMin(int min) {
@@ -95,6 +96,10 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
 
     public void setTextIndicatorEnabled(boolean enabled) {
         mTextView.setVisibility(enabled ? VISIBLE : GONE);
+    }
+
+    public void setScale(float scale) {
+        mScale = scale;
     }
 
     public DiscreteSeekBar getSeekBar() {
@@ -121,12 +126,12 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
         return mTextView.getVisibility() == VISIBLE;
     }
 
-    private void setText(String text) {
+    private void setText(int text) {
         String format = mSeekBar.getIndicatorFormatter();
         if (format == null) {
-            mTextView.setText(text);
+            mTextView.setText(String.valueOf(text / mScale));
         } else {
-            mTextView.setText(String.format(format, text));
+            mTextView.setText(String.format(format, String.valueOf(text / mScale)));
         }
     }
 
