@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
+import java.util.Locale;
+
 public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar.OnProgressChangeListener {
     private DiscreteSeekBar mSeekBar;
     private TextView mTextView;
@@ -127,11 +129,15 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
     }
 
     private void setText(int text) {
+        float scaled = text * mScale;
+
         String format = mSeekBar.getIndicatorFormatter();
+        String floatFormat = String.format(Locale.US, "%.2f", scaled);
+
         if (format == null) {
-            mTextView.setText(String.valueOf(text * mScale));
+            mTextView.setText(mScale < 1 ? floatFormat : String.valueOf(scaled));
         } else {
-            mTextView.setText(String.format(format, String.valueOf(text * mScale)));
+            mTextView.setText(String.format(format, mScale < 1 ? floatFormat : String.valueOf(scaled)));
         }
     }
 

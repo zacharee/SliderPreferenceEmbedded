@@ -70,6 +70,7 @@ public class SliderPreferenceEmbedded extends Preference {
         mMaxProgress = (mMaxProgress == -1 ? 100 : mMaxProgress);
         mMinProgress = (mMinProgress == -1 ? 0 : mMinProgress);
 
+        seekBar.setScale(mScale);
         seekBar = mView.findViewById(R.id.seekbar_view);
         seekBar.setMin(mMinProgress);
         seekBar.setMax(mMaxProgress);
@@ -77,7 +78,6 @@ public class SliderPreferenceEmbedded extends Preference {
         seekBar.setProgress(mProgress);
         seekBar.setTextIndicatorEnabled(textEnabled);
         seekBar.setPopupIndicatorEnabled(popupEnabled);
-        seekBar.setScale(mScale);
 
         seekBar.setOnProgressChangeListener(new DiscreteSeekBarText.OnProgressChangeListener() {
             @Override
