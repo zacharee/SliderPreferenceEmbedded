@@ -142,7 +142,7 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
         if (scaled == (long) scaled) {
             floatFormat = String.format(Locale.US, "%d", (long)scaled);
         } else {
-            floatFormat = String.format(Locale.US, "%s", scaled);
+            floatFormat = String.format(Locale.US, "%.2f", scaled);
         }
 
         if (format == null) {
