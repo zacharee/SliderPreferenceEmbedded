@@ -18,8 +18,7 @@ import java.util.Locale;
 public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar.OnProgressChangeListener {
     private DiscreteSeekBar mSeekBar;
     private TextView mTextView;
-    private float mScale = 1.0F; //doesn't work for the popup view
-    private int mPrecision = 2;
+    private float mScale = 1F; //doesn't work for the popup view
 
     private OnProgressChangeListener mListener;
 
@@ -103,10 +102,6 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
 
     public void setScale(float scale) {
         mScale = scale;
-    }
-
-    public void setPrecision(int precision) {
-        mPrecision = precision;
     }
 
     public DiscreteSeekBar getSeekBar() {

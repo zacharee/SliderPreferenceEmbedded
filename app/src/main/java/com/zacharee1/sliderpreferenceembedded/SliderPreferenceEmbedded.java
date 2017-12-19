@@ -20,8 +20,7 @@ public class SliderPreferenceEmbedded extends Preference {
     private int mMinProgress = -1;
     private int mXmlProgress = 0;
 
-    private float mScale = 1.0F; //doesn't work for the popup view
-    private int mPrecision = 2;
+    private float mScale = 1F; //doesn't work for the popup view
 
     private boolean popupEnabled = true;
     private boolean textEnabled = false;
@@ -55,7 +54,6 @@ public class SliderPreferenceEmbedded extends Preference {
             popupEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_popup, popupEnabled);
             textEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_text, textEnabled);
             mScale = a.getFloat(R.styleable.SliderPreferenceEmbedded_scale, mScale);
-            mPrecision = a.getInteger(R.styleable.SliderPreferenceEmbedded_precision, mPrecision);
         } finally {
             a.recycle();
         }
@@ -74,7 +72,6 @@ public class SliderPreferenceEmbedded extends Preference {
 
         seekBar = mView.findViewById(R.id.seekbar_view);
         seekBar.setScale(mScale);
-        seekBar.setPrecision(mPrecision);
         seekBar.setMin(mMinProgress);
         seekBar.setMax(mMaxProgress);
         seekBar.setIndicatorFormatter(mFormat);
