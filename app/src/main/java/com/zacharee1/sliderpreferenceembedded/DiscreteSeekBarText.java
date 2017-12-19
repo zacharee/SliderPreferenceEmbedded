@@ -137,7 +137,13 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
         double scaled = text * mScale;
 
         String format = mSeekBar.getIndicatorFormatter();
-        String floatFormat = String.format(Locale.US, "%d", (long)scaled);
+        String floatFormat;
+
+        if (scaled == (long) scaled) {
+            floatFormat = String.format(Locale.US, "%d", (long)scaled);
+        } else {
+            floatFormat = String.format(Locale.US, "%s", scaled);
+        }
 
         if (format == null) {
             mTextView.setText(mScale < 1 ? floatFormat : String.valueOf(scaled));
