@@ -5,7 +5,6 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.LinearLayout;
@@ -18,7 +17,8 @@ import java.util.Locale;
 public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar.OnProgressChangeListener {
     private DiscreteSeekBar mSeekBar;
     private TextView mTextView;
-    private float mScale = 1.0F;
+    private float mScale = 1.0F; //doesn't work for the popup view
+    private int mPrecision = 2;
 
     private OnProgressChangeListener mListener;
 
@@ -46,7 +46,7 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = getContext().getTheme();
         theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
-        @ColorInt int color = typedValue.data;
+        int color = typedValue.data;
 
         mSeekBar.setThumbColor(color, color);
         mSeekBar.setScrubberColor(color);
@@ -104,6 +104,10 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
         mScale = scale;
     }
 
+    public void setPrecision(int precision) {
+        mPrecision = precision;
+    }
+
     public DiscreteSeekBar getSeekBar() {
         return mSeekBar;
     }
@@ -132,7 +136,7 @@ public class DiscreteSeekBarText extends LinearLayout implements DiscreteSeekBar
         float scaled = text * mScale;
 
         String format = mSeekBar.getIndicatorFormatter();
-        String floatFormat = String.format(Locale.US, "%.2f", scaled);
+        String floatFormat = String.format(Locale.US, "%." + mPrecision + "f", scaled);
 
         if (format == null) {
             mTextView.setText(mScale < 1 ? floatFormat : String.valueOf(scaled));
