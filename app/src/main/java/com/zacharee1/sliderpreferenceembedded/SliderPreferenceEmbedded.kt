@@ -66,8 +66,8 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
     override fun onCreateView(parent: ViewGroup): View? {
         layoutResource = R.layout.pref_view_embedded
         widgetLayoutResource = R.layout.slider_pref_view
-        seekBar = view?.findViewById(R.id.seekbar_view)
         view = super.onCreateView(parent)
+        seekBar = view?.findViewById(R.id.seekbar_view)
 
         val a = context.theme.obtainStyledAttributes(
                 attrs,
