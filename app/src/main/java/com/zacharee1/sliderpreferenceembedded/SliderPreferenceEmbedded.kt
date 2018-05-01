@@ -48,7 +48,7 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
     override fun onCreateView(parent: ViewGroup): View? {
         view = super.onCreateView(parent)
         view.findViewById<LinearLayout>(R.id.seekbar_wrapper).apply {
-            removeView(seekBar)
+            removeAllViews()
             addView(seekBar)
         }
 

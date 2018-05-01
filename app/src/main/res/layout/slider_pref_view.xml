@@ -9,18 +9,14 @@
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:layout_gravity="center_vertical"
-    android:gravity="center_vertical"
-    android:id="@+id/seekbar_wrapper">
+    android:gravity="center_vertical">
 
-    <!--<com.zacharee1.sliderpreferenceembedded.DiscreteSeekBarText-->
-        <!--android:id="@+id/seekbar_view"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center_vertical"-->
-        <!--android:layout_weight="1" />-->
-        <!--app:dsb_indicatorColor="?attr/colorAccent"-->
-        <!--app:dsb_progressColor="?attr/colorAccent"-->
-        <!--app:dsb_rippleColor="?attr/colorAccent"-->
-        <!--app:dsb_trackColor="?attr/colorAccent"/>-->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/seekbar_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"/>
 
 </LinearLayout>
