@@ -2,6 +2,7 @@ package com.zacharee1.sliderpreferenceembedded
 
 import android.content.Context
 import android.preference.Preference
+import android.preference.PreferenceManager
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
@@ -20,7 +21,7 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
     val seekBar: DiscreteSeekBarText
 
     init {
-        seekBar = DiscreteSeekBarText(context)
+        seekBar = DiscreteSeekBarText(context, key)
 
         layoutResource = R.layout.pref_view_embedded
         widgetLayoutResource = R.layout.slider_pref_view
@@ -79,15 +80,16 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
         fun viewBound(preferenceEmbeddedNew: SliderPreferenceEmbedded)
     }
 
-    inner class DiscreteSeekBarText @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = R.attr.discreteSeekBarStyle)
+    class DiscreteSeekBarText @JvmOverloads constructor(context: Context, private val key: String? = null, attrs: AttributeSet? = null, defStyleAttr: Int = R.attr.discreteSeekBarStyle)
         : LinearLayout(context, attrs, defStyleAttr),
             DiscreteSeekBar.OnProgressChangeListener {
 
         private val seekBar: DiscreteSeekBar
         private val textView: TextView
+        private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         
         val savedProgress: Int
-            get() = sharedPreferences.getInt(key, xml)
+            get() = prefs.getInt(key, xml)
 
         var scale = 1f //doesn't work for the popup view
 
@@ -100,7 +102,7 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
             set(progress) {
                 seekBar.progress = progress
                 text = progress.toString()
-                sharedPreferences.edit().putInt(key, progress).apply()
+                prefs.edit().putInt(key, progress).apply()
             }
 
         var min: Int
