@@ -10,52 +10,52 @@ import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
 class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet) : Preference(context, attrs) {
     private var listener: Preference.OnPreferenceChangeListener? = null
 
-    private lateinit var view: View
-    private lateinit var seekBar: DiscreteSeekBarText
+    private var view: View? = null
+    private var seekBar: DiscreteSeekBarText? = null
 
     var scale: Float //doesn't work for the popup view
-        get() = seekBar.scale
+        get() = seekBar?.scale ?: 1f
         set(value) {
-            seekBar.scale = value
+            seekBar?.scale = value
         }
 
     var max: Int
-        get() = seekBar.max
+        get() = seekBar?.max ?: -1
         set(max) {
-            seekBar.max = max
+            seekBar?.max = max
         }
 
     var min: Int
-        get() = seekBar.min
+        get() = seekBar?.min ?: -1
         set(min) {
-            seekBar.min = min
+            seekBar?.min = min
         }
 
     var xml: Int = 0
 
     var progress: Int
-        get() = seekBar.progress
+        get() = seekBar?.progress ?: 0
         set(progress) {
-            seekBar.progress = progress
+            seekBar?.progress = progress
             sharedPreferences.edit().putInt(key, progress).apply()
         }
 
     var format: String
-        get() = seekBar.format
+        get() = seekBar?.format ?: ""
         set(value) {
-            seekBar.format = value
+            seekBar?.format = value
         }
 
     var popupEnabled: Boolean
-        get() = seekBar.popupIndicatorEnabled
+        get() = seekBar?.popupIndicatorEnabled ?: true
         set(value) {
-            seekBar.popupIndicatorEnabled = value
+            seekBar?.popupIndicatorEnabled = value
         }
 
     var textEnabled: Boolean
-        get() = seekBar.textIndicatorEnabled
+        get() = seekBar?.textIndicatorEnabled ?: false
         set(value) {
-            seekBar.textIndicatorEnabled = value
+            seekBar?.textIndicatorEnabled = value
         }
 
     var viewListener: OnViewCreatedListener? = null
@@ -66,7 +66,7 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
     override fun onCreateView(parent: ViewGroup): View? {
         layoutResource = R.layout.pref_view_embedded
         widgetLayoutResource = R.layout.slider_pref_view
-        seekBar = view.findViewById(R.id.seekbar_view)
+        seekBar = view?.findViewById(R.id.seekbar_view)
         view = super.onCreateView(parent)
 
         val a = context.theme.obtainStyledAttributes(
@@ -90,7 +90,7 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
         max = if (max == -1) 100 else max
         min = if (min == -1) 0 else min
 
-        seekBar.listener = object : DiscreteSeekBarText.OnProgressChangeListener {
+        seekBar?.listener = object : DiscreteSeekBarText.OnProgressChangeListener {
             override fun onProgressChanged(seekBar: DiscreteSeekBar, value: Int, fromUser: Boolean) {
                 listener?.onPreferenceChange(this@SliderPreferenceEmbedded, value)
             }
