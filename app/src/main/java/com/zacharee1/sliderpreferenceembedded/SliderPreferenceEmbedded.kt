@@ -13,20 +13,22 @@ import java.util.*
 
 class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet) : Preference(context, attrs) {
     private var listener: Preference.OnPreferenceChangeListener? = null
-
-    lateinit var view: View
-    lateinit var seekBar: DiscreteSeekBarText
-
     var viewListener: OnViewCreatedListener? = null
 
+    lateinit var view: View
+
+    val seekBar: DiscreteSeekBarText
+
     init {
+        seekBar = DiscreteSeekBarText(context)
+
         layoutResource = R.layout.pref_view_embedded
         widgetLayoutResource = R.layout.slider_pref_view
     }
 
     override fun onCreateView(parent: ViewGroup): View? {
         view = super.onCreateView(parent)
-        seekBar = view.findViewById(R.id.seekbar_view)
+        view.findViewById<LinearLayout>(R.id.seekbar_wrapper).addView(seekBar)
 
         seekBar.listener = object : OnProgressChangeListener {
             override fun onProgressChanged(seekBar: DiscreteSeekBar, value: Int, fromUser: Boolean) {
@@ -169,6 +171,8 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
             seekBar.setScrubberColor(color)
             seekBar.setTrackColor(color)
             seekBar.setRippleColor(color)
+
+            progress = savedProgress
         }
 
         override fun onStartTrackingTouch(seekBar: DiscreteSeekBar) {
