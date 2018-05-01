@@ -63,9 +63,12 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
     private val savedProgress: Int
         get() = sharedPreferences.getInt(key, xml)
 
-    override fun onCreateView(parent: ViewGroup): View? {
+    init {
         layoutResource = R.layout.pref_view_embedded
         widgetLayoutResource = R.layout.slider_pref_view
+    }
+
+    override fun onCreateView(parent: ViewGroup): View? {
         view = super.onCreateView(parent)
         seekBar = view?.findViewById(R.id.seekbar_view)
 
