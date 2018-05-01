@@ -188,7 +188,7 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
         override fun onProgressChanged(seekBar: DiscreteSeekBar, value: Int, fromUser: Boolean) {
             listener?.onProgressChanged(seekBar, value, fromUser)
 
-            text = value.toString()
+            progress = value
         }
     }
 
