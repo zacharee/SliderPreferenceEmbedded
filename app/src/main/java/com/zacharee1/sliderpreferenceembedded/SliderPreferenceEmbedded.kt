@@ -1,5 +1,6 @@
 package com.zacharee1.sliderpreferenceembedded
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.preference.Preference
 import android.preference.PreferenceManager
@@ -21,6 +22,8 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
     val seekBar: DiscreteSeekBarText
 
     init {
+        seekBar = DiscreteSeekBarText(context, key)
+
         layoutResource = R.layout.pref_view_embedded
         widgetLayoutResource = R.layout.slider_pref_view
 
@@ -30,7 +33,6 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
                 0, 0)
 
         try {
-            seekBar = DiscreteSeekBarText(context, a.getString(com.android.internal.R.styleable.Preference_key))
             seekBar.max = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_max, -1)
             seekBar.min = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_min, -1)
             seekBar.xml = a.getInteger(R.styleable.SliderPreferenceEmbedded_default_progress, -1)
@@ -82,7 +84,8 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
         fun viewBound(preferenceEmbeddedNew: SliderPreferenceEmbedded)
     }
 
-    class DiscreteSeekBarText @JvmOverloads constructor(context: Context, private val key: String? = null, attrs: AttributeSet? = null, defStyleAttr: Int = R.attr.discreteSeekBarStyle)
+    @SuppressLint("ViewConstructor")
+    class DiscreteSeekBarText @JvmOverloads constructor(context: Context, private val key: String, attrs: AttributeSet? = null, defStyleAttr: Int = R.attr.discreteSeekBarStyle)
         : LinearLayout(context, attrs, defStyleAttr),
             DiscreteSeekBar.OnProgressChangeListener {
 
