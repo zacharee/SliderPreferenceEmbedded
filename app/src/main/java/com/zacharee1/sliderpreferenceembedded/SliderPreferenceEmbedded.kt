@@ -3,65 +3,21 @@ package com.zacharee1.sliderpreferenceembedded
 import android.content.Context
 import android.preference.Preference
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+import java.util.*
 
 class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet) : Preference(context, attrs) {
     private var listener: Preference.OnPreferenceChangeListener? = null
 
-    private var view: View? = null
-    private var seekBar: DiscreteSeekBarText? = null
-
-    var scale: Float //doesn't work for the popup view
-        get() = seekBar?.scale ?: 1f
-        set(value) {
-            seekBar?.scale = value
-        }
-
-    var max: Int
-        get() = seekBar?.max ?: -1
-        set(max) {
-            seekBar?.max = max
-        }
-
-    var min: Int
-        get() = seekBar?.min ?: -1
-        set(min) {
-            seekBar?.min = min
-        }
-
-    var xml: Int = 0
-
-    var progress: Int
-        get() = seekBar?.progress ?: 0
-        set(progress) {
-            seekBar?.progress = progress
-            sharedPreferences.edit().putInt(key, progress).apply()
-        }
-
-    var format: String?
-        get() = seekBar?.format ?: ""
-        set(value) {
-            seekBar?.format = value ?: ""
-        }
-
-    var popupEnabled: Boolean
-        get() = seekBar?.popupIndicatorEnabled ?: true
-        set(value) {
-            seekBar?.popupIndicatorEnabled = value
-        }
-
-    var textEnabled: Boolean
-        get() = seekBar?.textIndicatorEnabled ?: false
-        set(value) {
-            seekBar?.textIndicatorEnabled = value
-        }
+    lateinit var view: View
+    lateinit var seekBar: DiscreteSeekBarText
 
     var viewListener: OnViewCreatedListener? = null
-
-    private val savedProgress: Int
-        get() = sharedPreferences.getInt(key, xml)
 
     init {
         layoutResource = R.layout.pref_view_embedded
@@ -70,18 +26,35 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
 
     override fun onCreateView(parent: ViewGroup): View? {
         view = super.onCreateView(parent)
-        seekBar = view?.findViewById(R.id.seekbar_view)
+        seekBar = view.findViewById(R.id.seekbar_view)
 
-        seekBar?.listener = object : DiscreteSeekBarText.OnProgressChangeListener {
+        seekBar.listener = object : OnProgressChangeListener {
             override fun onProgressChanged(seekBar: DiscreteSeekBar, value: Int, fromUser: Boolean) {
                 listener?.onPreferenceChange(this@SliderPreferenceEmbedded, value)
             }
 
             override fun onStopTrackingTouch(seekBar: DiscreteSeekBar) {
-                listener?.onPreferenceChange(this@SliderPreferenceEmbedded, progress)
+                listener?.onPreferenceChange(this@SliderPreferenceEmbedded, seekBar.progress)
             }
 
             override fun onStartTrackingTouch(seekBar: DiscreteSeekBar) {}
+        }
+
+        val a = context.theme.obtainStyledAttributes(
+                attrs,
+                R.styleable.SliderPreferenceEmbedded,
+                0, 0)
+
+        try {
+            seekBar.max = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_max, -1)
+            seekBar.min = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_min, -1)
+            seekBar.xml = a.getInteger(R.styleable.SliderPreferenceEmbedded_default_progress, -1)
+            seekBar.format = a.getString(R.styleable.SliderPreferenceEmbedded_format)
+            seekBar.popupIndicatorEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_popup, seekBar.popupIndicatorEnabled)
+            seekBar.textIndicatorEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_text, seekBar.textIndicatorEnabled)
+            seekBar.scale = a.getFloat(R.styleable.SliderPreferenceEmbedded_scale, seekBar.scale)
+        } finally {
+            a.recycle()
         }
 
         viewListener?.viewCreated(this)
@@ -91,27 +64,6 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
 
     override fun onBindView(view: View) {
         super.onBindView(view)
-
-        val a = context.theme.obtainStyledAttributes(
-                attrs,
-                R.styleable.SliderPreferenceEmbedded,
-                0, 0)
-
-        try {
-            max = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_max, -1)
-            min = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_min, -1)
-            xml = a.getInteger(R.styleable.SliderPreferenceEmbedded_default_progress, -1)
-            format = a.getString(R.styleable.SliderPreferenceEmbedded_format)
-            popupEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_popup, popupEnabled)
-            textEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_text, textEnabled)
-            scale = a.getFloat(R.styleable.SliderPreferenceEmbedded_scale, scale)
-        } finally {
-            a.recycle()
-        }
-
-        progress = if (progress == -1) savedProgress else progress
-        max = if (max == -1) 100 else max
-        min = if (min == -1) 0 else min
 
         viewListener?.viewBound(this)
     }
@@ -123,5 +75,120 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
     interface OnViewCreatedListener {
         fun viewCreated(preferenceEmbeddedNew: SliderPreferenceEmbedded)
         fun viewBound(preferenceEmbeddedNew: SliderPreferenceEmbedded)
+    }
+
+    inner class DiscreteSeekBarText @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = R.attr.discreteSeekBarStyle)
+        : LinearLayout(context, attrs, defStyleAttr),
+            DiscreteSeekBar.OnProgressChangeListener {
+
+        private val seekBar: DiscreteSeekBar
+        private val textView: TextView
+        
+        val savedProgress: Int
+            get() = sharedPreferences.getInt(key, xml)
+
+        var scale = 1f //doesn't work for the popup view
+
+        var listener: OnProgressChangeListener? = null
+        
+        var xml: Int = 0
+
+        var progress: Int
+            get() = seekBar.progress
+            set(progress) {
+                seekBar.progress = progress
+                text = progress.toString()
+                sharedPreferences.edit().putInt(key, progress).apply()
+            }
+
+        var min: Int
+            get() = seekBar.min
+            set(min) {
+                seekBar.min = min
+            }
+
+        var max: Int
+            get() = seekBar.max
+            set(max) {
+                seekBar.max = max
+            }
+
+        var popupIndicatorEnabled: Boolean
+            get() = seekBar.indicatorPopupEnabled
+            set(enabled) {
+                seekBar.indicatorPopupEnabled = enabled
+            }
+
+        var textIndicatorEnabled: Boolean
+            get() = textView.visibility == View.VISIBLE
+            set(enabled) {
+                textView.visibility = if (enabled) View.VISIBLE else View.GONE
+            }
+
+        var format: String
+            get() = seekBar.indicatorFormatter
+            set(value) {
+                seekBar.indicatorFormatter = value
+            }
+
+        var text: String
+            get() = textView.text.toString()
+            set(value) {
+                val scaled = (value.toInt() * scale).toDouble()
+
+                val format = seekBar.indicatorFormatter
+                val floatFormat: String
+
+                floatFormat = if (scaled == scaled.toLong().toDouble()) {
+                    String.format(Locale.US, "%d", scaled.toLong())
+                } else {
+                    String.format(Locale.US, "%.2f", scaled)
+                }
+
+                if (format == null) {
+                    textView.text = if (scale < 1) floatFormat else scaled.toString()
+                } else {
+                    textView.text = String.format(format, if (scale < 1) floatFormat else scaled.toString())
+                }
+            }
+
+        init {
+            View.inflate(context, R.layout.seekbar_with_text, this)
+
+            seekBar = findViewById(R.id.seekbar)
+            textView = findViewById(R.id.textview)
+
+            seekBar.setOnProgressChangeListener(this)
+
+            val typedValue = TypedValue()
+            val theme = context.theme
+            theme.resolveAttribute(R.attr.colorAccent, typedValue, true)
+            val color = typedValue.data
+
+            seekBar.setThumbColor(color, color)
+            seekBar.setScrubberColor(color)
+            seekBar.setTrackColor(color)
+            seekBar.setRippleColor(color)
+        }
+
+        override fun onStartTrackingTouch(seekBar: DiscreteSeekBar) {
+            listener?.onStartTrackingTouch(seekBar)
+        }
+
+        override fun onStopTrackingTouch(seekBar: DiscreteSeekBar) {
+            listener?.onStopTrackingTouch(seekBar)
+        }
+
+        override fun onProgressChanged(seekBar: DiscreteSeekBar, value: Int, fromUser: Boolean) {
+            listener?.onProgressChanged(seekBar, value, fromUser)
+
+            text = value.toString()
+        }
+    }
+
+    interface OnProgressChangeListener {
+        fun onProgressChanged(seekBar: DiscreteSeekBar, value: Int, fromUser: Boolean)
+        fun onStopTrackingTouch(seekBar: DiscreteSeekBar)
+        fun onStartTrackingTouch(seekBar: DiscreteSeekBar)
     }
 }
