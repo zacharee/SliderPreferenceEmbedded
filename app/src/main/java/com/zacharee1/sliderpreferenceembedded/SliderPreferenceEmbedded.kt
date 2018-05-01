@@ -52,7 +52,7 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
             seekBar.max = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_max, -1)
             seekBar.min = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_min, -1)
             seekBar.xml = a.getInteger(R.styleable.SliderPreferenceEmbedded_default_progress, -1)
-            seekBar.format = a.getString(R.styleable.SliderPreferenceEmbedded_format)
+            seekBar.format = a.getString(R.styleable.SliderPreferenceEmbedded_format) ?: ""
             seekBar.popupIndicatorEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_popup, seekBar.popupIndicatorEnabled)
             seekBar.textIndicatorEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_text, seekBar.textIndicatorEnabled)
             seekBar.scale = a.getFloat(R.styleable.SliderPreferenceEmbedded_scale, seekBar.scale)
