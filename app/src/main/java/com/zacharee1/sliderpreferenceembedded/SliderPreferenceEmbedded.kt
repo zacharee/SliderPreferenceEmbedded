@@ -40,10 +40,10 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
             sharedPreferences.edit().putInt(key, progress).apply()
         }
 
-    var format: String
+    var format: String?
         get() = seekBar?.format ?: ""
         set(value) {
-            seekBar?.format = value
+            seekBar?.format = value ?: ""
         }
 
     var popupEnabled: Boolean
