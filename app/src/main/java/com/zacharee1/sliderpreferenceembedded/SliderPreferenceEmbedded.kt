@@ -72,6 +72,26 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
         view = super.onCreateView(parent)
         seekBar = view?.findViewById(R.id.seekbar_view)
 
+        seekBar?.listener = object : DiscreteSeekBarText.OnProgressChangeListener {
+            override fun onProgressChanged(seekBar: DiscreteSeekBar, value: Int, fromUser: Boolean) {
+                listener?.onPreferenceChange(this@SliderPreferenceEmbedded, value)
+            }
+
+            override fun onStopTrackingTouch(seekBar: DiscreteSeekBar) {
+                listener?.onPreferenceChange(this@SliderPreferenceEmbedded, progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: DiscreteSeekBar) {}
+        }
+
+        viewListener?.viewCreated(this)
+
+        return view
+    }
+
+    override fun onBindView(view: View) {
+        super.onBindView(view)
+
         val a = context.theme.obtainStyledAttributes(
                 attrs,
                 R.styleable.SliderPreferenceEmbedded,
@@ -92,26 +112,6 @@ class SliderPreferenceEmbedded(context: Context, private val attrs: AttributeSet
         progress = if (progress == -1) savedProgress else progress
         max = if (max == -1) 100 else max
         min = if (min == -1) 0 else min
-
-        seekBar?.listener = object : DiscreteSeekBarText.OnProgressChangeListener {
-            override fun onProgressChanged(seekBar: DiscreteSeekBar, value: Int, fromUser: Boolean) {
-                listener?.onPreferenceChange(this@SliderPreferenceEmbedded, value)
-            }
-
-            override fun onStopTrackingTouch(seekBar: DiscreteSeekBar) {
-                listener?.onPreferenceChange(this@SliderPreferenceEmbedded, progress)
-            }
-
-            override fun onStartTrackingTouch(seekBar: DiscreteSeekBar) {}
-        }
-
-        viewListener?.viewCreated(this)
-
-        return view
-    }
-
-    override fun onBindView(view: View) {
-        super.onBindView(view)
 
         viewListener?.viewBound(this)
     }
