@@ -14,17 +14,17 @@ class DiscreteSeekBarText @JvmOverloads constructor(context: Context, attrs: Att
         DiscreteSeekBar.OnProgressChangeListener {
 
     private val seekBar: DiscreteSeekBar
-    private val mTextView: TextView
+    private val textView: TextView
 
-    private var scale = 1f //doesn't work for the popup view
+    var scale = 1f //doesn't work for the popup view
 
-    private var listener: OnProgressChangeListener? = null
+    var listener: OnProgressChangeListener? = null
 
     var progress: Int
         get() = seekBar.progress
         set(progress) {
             seekBar.progress = progress
-            setText(progress)
+            text = progress.toString()
         }
 
     var min: Int
@@ -46,16 +46,43 @@ class DiscreteSeekBarText @JvmOverloads constructor(context: Context, attrs: Att
         }
 
     var textIndicatorEnabled: Boolean
-        get() = mTextView.visibility == View.VISIBLE
+        get() = textView.visibility == View.VISIBLE
         set(enabled) {
-            mTextView.visibility = if (enabled) View.VISIBLE else View.GONE
+            textView.visibility = if (enabled) View.VISIBLE else View.GONE
+        }
+
+    var format: String
+        get() = seekBar.indicatorFormatter
+        set(value) {
+            seekBar.indicatorFormatter = value
+        }
+
+    var text: String
+        get() = textView.text.toString()
+        set(value) {
+            val scaled = (value.toInt() * scale).toDouble()
+
+            val format = seekBar.indicatorFormatter
+            val floatFormat: String
+
+            floatFormat = if (scaled == scaled.toLong().toDouble()) {
+                String.format(Locale.US, "%d", scaled.toLong())
+            } else {
+                String.format(Locale.US, "%.2f", scaled)
+            }
+
+            if (format == null) {
+                textView.text = if (scale < 1) floatFormat else scaled.toString()
+            } else {
+                textView.text = String.format(format, if (scale < 1) floatFormat else scaled.toString())
+            }
         }
 
     init {
         View.inflate(context, R.layout.seekbar_with_text, this)
 
         seekBar = findViewById(R.id.seekbar)
-        mTextView = findViewById(R.id.textview)
+        textView = findViewById(R.id.textview)
 
         seekBar.setOnProgressChangeListener(this)
 
@@ -81,38 +108,7 @@ class DiscreteSeekBarText @JvmOverloads constructor(context: Context, attrs: Att
     override fun onProgressChanged(seekBar: DiscreteSeekBar, value: Int, fromUser: Boolean) {
         listener?.onProgressChanged(seekBar, value, fromUser)
 
-        setText(value)
-    }
-
-    fun setOnProgressChangeListener(listener: OnProgressChangeListener) {
-        this.listener = listener
-    }
-
-    fun setIndicatorFormatter(formatter: String) {
-        seekBar.indicatorFormatter = formatter
-    }
-
-    fun setScale(scale: Float) {
-        this.scale = scale
-    }
-
-    private fun setText(text: Int) {
-        val scaled = (text * scale).toDouble()
-
-        val format = seekBar.indicatorFormatter
-        val floatFormat: String
-
-        floatFormat = if (scaled == scaled.toLong().toDouble()) {
-            String.format(Locale.US, "%d", scaled.toLong())
-        } else {
-            String.format(Locale.US, "%.2f", scaled)
-        }
-
-        if (format == null) {
-            mTextView.text = if (scale < 1) floatFormat else scaled.toString()
-        } else {
-            mTextView.text = String.format(format, if (scale < 1) floatFormat else scaled.toString())
-        }
+        text = value.toString()
     }
 
     interface OnProgressChangeListener {
