@@ -5,6 +5,7 @@ import android.content.Context
 import android.preference.Preference
 import android.preference.PreferenceManager
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -105,6 +106,7 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
         var progress: Int
             get() = seekBar.progress
             set(progress) {
+                Log.e("NoBar", "hue $key")
                 seekBar.progress = progress
                 text = progress.toString()
                 prefs.edit().putInt(key, progress).apply()
