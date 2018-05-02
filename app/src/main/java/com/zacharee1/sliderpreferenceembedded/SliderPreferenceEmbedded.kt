@@ -34,7 +34,7 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
         try {
             seekBar.max = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_max, seekBar.max)
             seekBar.min = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_min, seekBar.min)
-            seekBar.xml = a.getInteger(R.styleable.SliderPreferenceEmbedded_default_progress, seekBar.progress)
+            seekBar.origProgress = a.getInteger(R.styleable.SliderPreferenceEmbedded_default_progress, 0)
             seekBar.format = a.getString(R.styleable.SliderPreferenceEmbedded_format) ?: seekBar.format
             seekBar.popupIndicatorEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_popup, seekBar.popupIndicatorEnabled)
             seekBar.textIndicatorEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_text, seekBar.textIndicatorEnabled)
@@ -99,11 +99,11 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
         var scale = 1f //doesn't work for the popup view
 
         var listener: OnProgressChangeListener? = null
-        
-        var xml: Int = 0
+
+        var origProgress = 0
 
         var progress: Int
-            get() = prefs.getInt(key, xml)
+            get() = prefs.getInt(key, 0)
             set(progress) {
                 seekBar.progress = progress
                 text = progress.toString()
@@ -178,10 +178,12 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
             seekBar.setScrubberColor(color)
             seekBar.setTrackColor(color)
             seekBar.setRippleColor(color)
+        }
 
-            progress = progress
-            max = if (max == -1) 100 else max
-            min = if (min == -1) 0 else min
+        override fun onAttachedToWindow() {
+            super.onAttachedToWindow()
+
+            if (progress == 0) progress = origProgress
         }
 
         override fun onStartTrackingTouch(seekBar: DiscreteSeekBar) {
@@ -195,7 +197,7 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
         override fun onProgressChanged(seekBar: DiscreteSeekBar, value: Int, fromUser: Boolean) {
             listener?.onProgressChanged(seekBar, value, fromUser)
 
-            progress = value
+            if (fromUser) progress = value
         }
     }
 
