@@ -1,11 +1,9 @@
 package com.zacharee1.sliderpreferenceembedded
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.preference.Preference
 import android.preference.PreferenceManager
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +21,7 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
     val seekBar: DiscreteSeekBarText
 
     init {
-        seekBar = DiscreteSeekBarText(context, key)
+        seekBar = DiscreteSeekBarText(context)
 
         layoutResource = R.layout.pref_view_embedded
         widgetLayoutResource = R.layout.slider_pref_view
@@ -34,10 +32,10 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
                 0, 0)
 
         try {
-            seekBar.max = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_max, -1)
-            seekBar.min = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_min, -1)
-            seekBar.xml = a.getInteger(R.styleable.SliderPreferenceEmbedded_default_progress, -1)
-            seekBar.format = a.getString(R.styleable.SliderPreferenceEmbedded_format) ?: ""
+            seekBar.max = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_max, seekBar.max)
+            seekBar.min = a.getInteger(R.styleable.SliderPreferenceEmbedded_seek_min, seekBar.min)
+            seekBar.xml = a.getInteger(R.styleable.SliderPreferenceEmbedded_default_progress, seekBar.progress)
+            seekBar.format = a.getString(R.styleable.SliderPreferenceEmbedded_format) ?: seekBar.format
             seekBar.popupIndicatorEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_popup, seekBar.popupIndicatorEnabled)
             seekBar.textIndicatorEnabled = a.getBoolean(R.styleable.SliderPreferenceEmbedded_show_text, seekBar.textIndicatorEnabled)
             seekBar.scale = a.getFloat(R.styleable.SliderPreferenceEmbedded_scale, seekBar.scale)
@@ -49,8 +47,13 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
     override fun onCreateView(parent: ViewGroup): View? {
         view = super.onCreateView(parent)
         view.findViewById<LinearLayout>(R.id.seekbar_wrapper).apply {
-            removeAllViews()
+            if (seekBar.parent != null) (seekBar.parent as ViewGroup).removeAllViews()
             addView(seekBar)
+
+            (seekBar.layoutParams as LinearLayout.LayoutParams).apply {
+                weight = 1f
+                width = LinearLayout.LayoutParams.WRAP_CONTENT
+            }
         }
 
         seekBar.listener = object : OnProgressChangeListener {
@@ -85,17 +88,13 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
         fun viewBound(preferenceEmbeddedNew: SliderPreferenceEmbedded)
     }
 
-    @SuppressLint("ViewConstructor")
-    class DiscreteSeekBarText @JvmOverloads constructor(context: Context, private val key: String, attrs: AttributeSet? = null, defStyleAttr: Int = R.attr.discreteSeekBarStyle)
-        : LinearLayout(context, attrs, defStyleAttr),
+    inner class DiscreteSeekBarText constructor(context: Context)
+        : LinearLayout(context, null, R.attr.discreteSeekBarStyle),
             DiscreteSeekBar.OnProgressChangeListener {
 
         private val seekBar: DiscreteSeekBar
         private val textView: TextView
         private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        
-        val savedProgress: Int
-            get() = prefs.getInt(key, xml)
 
         var scale = 1f //doesn't work for the popup view
 
@@ -104,9 +103,8 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
         var xml: Int = 0
 
         var progress: Int
-            get() = seekBar.progress
+            get() = prefs.getInt(key, xml)
             set(progress) {
-                Log.e("NoBar", "hue $key")
                 seekBar.progress = progress
                 text = progress.toString()
                 prefs.edit().putInt(key, progress).apply()
@@ -136,7 +134,7 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
                 textView.visibility = if (enabled) View.VISIBLE else View.GONE
             }
 
-        var format: String
+        var format: String?
             get() = seekBar.indicatorFormatter
             set(value) {
                 seekBar.indicatorFormatter = value
@@ -145,7 +143,7 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
         var text: String
             get() = textView.text.toString()
             set(value) {
-                val scaled = (value.toInt() * scale).toDouble()
+                val scaled = (value.toDouble() * scale)
 
                 val format = seekBar.indicatorFormatter
                 val floatFormat: String
@@ -157,9 +155,9 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
                 }
 
                 if (format == null) {
-                    textView.text = if (scale < 1) floatFormat else scaled.toString()
+                    textView.text = if (scale < 1F) floatFormat else scaled.toInt().toString()
                 } else {
-                    textView.text = String.format(format, if (scale < 1) floatFormat else scaled.toString())
+                    textView.text = String.format(format, if (scale < 1F) floatFormat else scaled.toString())
                 }
             }
 
@@ -181,7 +179,9 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
             seekBar.setTrackColor(color)
             seekBar.setRippleColor(color)
 
-            progress = savedProgress
+            progress = progress
+            max = if (max == -1) 100 else max
+            min = if (min == -1) 0 else min
         }
 
         override fun onStartTrackingTouch(seekBar: DiscreteSeekBar) {

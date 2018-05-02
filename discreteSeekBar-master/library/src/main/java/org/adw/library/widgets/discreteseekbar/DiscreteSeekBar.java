@@ -708,7 +708,7 @@ public class DiscreteSeekBar extends View {
         switch (actionMasked) {
             case MotionEvent.ACTION_DOWN:
                 mDownX = event.getX();
-                startDragging(event, isInScrollingContainer());
+                startDragging(event, isInScrollContainer());
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (isDragging()) {
@@ -734,7 +734,7 @@ public class DiscreteSeekBar extends View {
         return true;
     }
 
-    private boolean isInScrollingContainer() {
+    private boolean isInScrollContainer() {
         return SeekBarCompat.isInScrollingContainer(getParent());
     }
 
