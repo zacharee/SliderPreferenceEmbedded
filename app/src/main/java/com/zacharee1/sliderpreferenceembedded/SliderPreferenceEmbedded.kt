@@ -145,7 +145,6 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
             set(value) {
                 val scaled = (value.toDouble() * scale)
 
-                val format = seekBar.indicatorFormatter
                 val floatFormat: String
 
                 floatFormat = if (scaled == scaled.toLong().toDouble()) {
@@ -157,7 +156,7 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
                 if (format == null) {
                     textView.text = if (scale < 1F) floatFormat else scaled.toInt().toString()
                 } else {
-                    textView.text = String.format(format, if (scale < 1F) floatFormat else scaled.toString())
+                    textView.text = String.format(format!!, if (scale < 1F) floatFormat else scaled.toInt().toString())
                 }
             }
 
@@ -183,7 +182,10 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
         override fun onAttachedToWindow() {
             super.onAttachedToWindow()
 
-            if (progress == 0) progress = origProgress
+            progress = if (progress == 0) origProgress
+            else progress
+
+            Runnable {  }
         }
 
         override fun onStartTrackingTouch(seekBar: DiscreteSeekBar) {
@@ -198,6 +200,10 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : Preferen
             listener?.onProgressChanged(seekBar, value, fromUser)
 
             if (fromUser) progress = value
+        }
+
+        fun resetProgress() {
+            progress = origProgress
         }
     }
 
