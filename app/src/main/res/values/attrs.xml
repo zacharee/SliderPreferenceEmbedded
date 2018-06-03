@@ -4,11 +4,14 @@
     <declare-styleable name="SliderPreferenceEmbedded">
         <attr name="seek_max" format="integer|reference" />
         <attr name="seek_min" format="integer|reference" />
-        <attr name="default_progress" format="integer|reference" />
+        <!--<attr name="default_progress" format="integer|reference" />-->
         <attr name="format" format="string|reference" />
         <attr name="show_text" format="boolean|reference" />
         <attr name="show_popup" format="boolean|reference" />
         <attr name="scale" format="float|reference" />
+        <attr name="show_buttons" format="boolean|reference" />
+        <attr name="show_reset" format="boolean|reference" />
+        <attr name="use_accent_color_for_widget_items" format="boolean|reference" />
     </declare-styleable>
 
 </resources>
