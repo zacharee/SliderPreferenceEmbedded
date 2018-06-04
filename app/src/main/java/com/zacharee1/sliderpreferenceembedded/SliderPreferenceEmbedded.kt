@@ -20,7 +20,7 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : DefaultV
 
     lateinit var view: View
 
-    val seekBar: DiscreteSeekBarText
+    var seekBar: DiscreteSeekBarText
 
     private var listener: Preference.OnPreferenceChangeListener? = null
 
@@ -91,7 +91,7 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : DefaultV
     override fun onCreateView(parent: ViewGroup): View? {
         view = super.onCreateView(parent)
         view.findViewById<LinearLayout>(R.id.seekbar_wrapper).apply {
-            if (seekBar.parent != null) (seekBar.parent as ViewGroup).removeAllViews()
+            seekBar = DiscreteSeekBarText(seekBar)
             addView(seekBar)
 
             (seekBar.layoutParams as LinearLayout.LayoutParams).apply {
@@ -198,6 +198,17 @@ class SliderPreferenceEmbedded(context: Context, attrs: AttributeSet) : DefaultV
             }
 
         private var fromUser = false
+
+        constructor(seekBar: DiscreteSeekBarText) : this(seekBar.context) {
+            format = seekBar.format
+            scale = seekBar.scale
+            listener = seekBar.listener
+            progress = seekBar.progress
+            min = seekBar.min
+            max = seekBar.max
+            textIndicatorEnabled = seekBar.textIndicatorEnabled
+            discrete = seekBar.discrete
+        }
 
         init {
             View.inflate(context, R.layout.seekbar_with_text, this)
