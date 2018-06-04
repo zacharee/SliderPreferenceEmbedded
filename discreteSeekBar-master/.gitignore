@@ -1,7 +1,6 @@
 .gradle
 /local.properties
-bintray.properties
-/.idea
+/.idea/workspace.xml
+/.idea/libraries
 .DS_Store
 /build
-*.iml

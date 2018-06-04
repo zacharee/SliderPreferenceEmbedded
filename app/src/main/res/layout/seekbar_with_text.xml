@@ -7,37 +7,39 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:layout_gravity="center_vertical"
         android:id="@+id/reset"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center_vertical"
         android:background="?android:selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
+        android:padding="3dp"
         android:tint="#fff"
         app:srcCompat="@drawable/ic_reset_black_24dp" />
 
-    <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+    <com.rey.material.widget.Slider
         android:id="@+id/seekbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        app:dsb_indicatorColor="?attr/colorAccent"
-        app:dsb_progressColor="?attr/colorAccent"
-        app:dsb_rippleColor="?attr/colorAccent"
-        app:dsb_trackColor="?attr/colorAccent" />
+        android:paddingEnd="4dp"
+        android:paddingStart="4dp" />
 
     <TextView
         android:id="@+id/textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical" />
+        android:layout_gravity="center_vertical"
+        android:gravity="center_horizontal"
+        android:minWidth="50dp"
+        android:textAlignment="center"
+        tools:text="100dp" />
 
     <LinearLayout
-        android:id="@+id/button_wrapper"
-        android:layout_width="30dp"
-        android:layout_height="60dp"
+        android:layout_width="35dp"
+        android:layout_height="70dp"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="4dp"
         android:orientation="vertical">
